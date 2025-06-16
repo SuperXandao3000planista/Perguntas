@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 min-h-screen p-4">
+    <!-- Configuração do modo escuro -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                📚 Meus Flashcards
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300">
+                Clique nos cartões para ver as respostas
+            </p>
+        </header>
+
+        <!-- Container dos cartões -->
+        <div id="container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Os cartões serão inseridos aqui -->
+        </div>
+    </div>
+
+    <script>
+        // Cores para as categorias
+        const coresCategorias = {
+            'Programação': 'bg-blue-500',
+            'Geografia': 'bg-green-500',
+            'História': 'bg-red-500',
+            'Lingua inglesa': 'bg-purple-500',
+            'Tecnologia': 'bg-indigo-500',
+            'Ciências': 'bg-teal-500',
+            'Curiosidades': 'bg-pink-500',
+            'default': 'bg-gray-500'
+        };
+
+        function criaCartao(categoria, pergunta, resposta) {
+            const container = document.getElementById('container');
+            const cor = coresCategorias[categoria] || coresCategorias['default'];
+            
+            const cartaoHTML = `
+                <div class="flip-card h-64 cursor-pointer" onclick="virarCartao(this)">
+                    <div class="flip-card-inner relative w-full h-full">
+                        <!-- Frente do cartão -->
+                        <div class="flip-card-front absolute inset-0 ${cor} rounded-xl shadow-lg p-6 flex flex-col justify-between text-white">
+                            <div>
+                                <span class="inline-block px-3 py-1 bg-white bg-opacity-20 rounded-full text-sm font-medium mb-4">
+                                    ${categoria}
+                                </span>
+                            </div>
+                            <div class="flex-1 flex items-center justify-center">
+                                <h2 class="text-lg font-bold text-center leading-tight">
+                                    ${pergunta}
+                                </h2>
+                            </div>
+                            <div class="text-center text-sm opacity-80">
+                                Clique para ver a resposta
+                            </div>
+                        </div>
+                        
+                        <!-- Verso do cartão -->
+                        <div class="flip-card-back absolute inset-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col justify-center border border-gray-200 dark:border-gray-700">
+                            <div class="text-center">
+                                <div class="mb-4">
+                                    <span class="inline-block px-3 py-1 ${cor} bg-opacity-10 rounded-full text-gray-700 dark:text-gray-300 text-sm font-medium">
+                                        Resposta
+                                    </span>
+                                </div>
+                                <p class="text-gray-800 dark:text-gray-200 text-lg leading-relaxed">
+                                    ${resposta}
+                                </p>
+                                <div class="mt-4 text-gray-500 dark:text-gray-400 text-sm">
+                                    Clique novamente para voltar
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML += cartaoHTML;
+        }
+
+        function virarCartao(elemento) {
+            elemento.classList.toggle('flipped');
+        }
+
+        // Suas questões originais melhoradas
+        criaCartao(
+            'Programação',
+            'O que é Python?',
+            'Python é uma linguagem de programação de alto nível, interpretada e de propósito geral, conhecida por sua sintaxe simples e legível.'
+        );
+
+        criaCartao(
+            'Geografia',
+            'Qual a capital da França?',
+            'A capital da França é Paris, uma das cidades mais visitadas do mundo e centro cultural europeu.'
+        );
+
+        criaCartao(
+            'Programação',
+            'O que é uma função?',
+            'Uma função é um bloco de código reutilizável que executa uma tarefa específica e pode receber parâmetros e retornar valores.'
+        );
+
+        criaCartao(
+            'Lingua inglesa',
+            'Como se diz "oi" em Inglês?',
+            'Em inglês, "oi" pode ser dito como "Hi" (pronuncia-se "rai"), "Hello" ou "Hey", dependendo da formalidade.'
+        );
+
+        // Questões adicionais
+        criaCartao(
+            'Tecnologia',
+            'O que significa HTML?',
+            'HTML significa HyperText Markup Language (Linguagem de Marcação de Hipertexto), usada para criar páginas web.'
+        );
+
+        criaCartao(
+            'Ciências',
+            'Qual é o planeta mais próximo do Sol?',
+            'Mercúrio é o planeta mais próximo do Sol em nosso sistema solar, com temperaturas extremas.'
+        );
+
+        criaCartao(
+            'História',
+            'Em que ano o Brasil foi descoberto?',
+            'O Brasil foi descoberto em 1500 por Pedro Álvares Cabral, marcando o início da colonização portuguesa.'
+        );
+
+        criaCartao(
+            'Curiosidades',
+            'Qual é o maior mamífero do mundo?',
+            'A baleia-azul é o maior mamífero do mundo, podendo chegar a 30 metros de comprimento e pesar até 200 toneladas.'
+        );
+    </script>
+</body>
+</html>
